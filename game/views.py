@@ -142,8 +142,7 @@ class FirstRowView(GenericAPIView):
                                     "list": False,
                                     "required": True
                                 },
-                                first_row
-                            ]
+                            ] + first_row
                         }
                     },
                     status=status.HTTP_201_CREATED
