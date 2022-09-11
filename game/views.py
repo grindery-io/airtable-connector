@@ -15,9 +15,11 @@ class TriggerTableView(GenericAPIView):
     serializer_class = ConnectorSerializer
 
     def post(self, request):
+        print('------------1----------------')
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        print('------------2----------------')
         params = serializer.data.get('params')
         request_id = serializer.data.get('id')
 
@@ -25,6 +27,7 @@ class TriggerTableView(GenericAPIView):
         app_id = ''
         table_name = ''
 
+        print('------------3----------------')
         key = params['key']
         if 'api_key' in params['fieldData']:
             api_key = params['fieldData']['api_key']
@@ -33,6 +36,7 @@ class TriggerTableView(GenericAPIView):
         if 'table_name' in params['fieldData']:
             table_name = params['fieldData']['table_name']
 
+        print('------------4----------------')
         if api_key != '' and app_id != '' and table_name != '':
             try:
                 table = Table(api_key, app_id, table_name)
