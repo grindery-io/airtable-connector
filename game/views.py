@@ -74,6 +74,7 @@ class TriggerTableView(GenericAPIView):
                 status=status.HTTP_201_CREATED
             )
 
+
 class FirstRowView(GenericAPIView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -116,7 +117,33 @@ class FirstRowView(GenericAPIView):
                         "jsonrpc": "2.0",
                         "id": request_id,
                         "result": {
-                            "inputFields": first_row
+                            "inputFields": [
+                                {
+                                    "key": "api_key",
+                                    "label": "API key",
+                                    "type": "string",
+                                    "placeholder": "To generate or manage your API key, visit your account page. https://airtable.com/account",
+                                    "list": False,
+                                    "required": True
+                                },
+                                {
+                                    "key": "app_id",
+                                    "label": "Base Id",
+                                    "type": "string",
+                                    "placeholder": "To get base id, API documentation of Base",
+                                    "list": False,
+                                    "required": True
+                                },
+                                {
+                                    "key": "table_name",
+                                    "label": "Table Name",
+                                    "type": "string",
+                                    "placeholder": "Enter table name in Airtable",
+                                    "list": False,
+                                    "required": True
+                                },
+                                first_row
+                            ]
                         }
                     },
                     status=status.HTTP_201_CREATED
@@ -133,6 +160,18 @@ class FirstRowView(GenericAPIView):
                     },
                     status=status.HTTP_201_CREATED
                 )
+        else:
+            return Response(
+                {
+                    'jsonrpc': '2.0',
+                    'error': {
+                        'code': 1,
+                        'message': 'fetching table is failed'
+                    },
+                    'id': id
+                },
+                status=status.HTTP_201_CREATED
+            )
 
 
 def get_number_of_rows(api_key, app_id, table_name):
