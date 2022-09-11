@@ -105,13 +105,15 @@ class SocketAdapter(AsyncJsonWebsocketConsumer):
             await self.send_json(response)
 
         if method == 'runAction':
+            print('---------method--------')
             values = {}
             for key in fields:
                 if key.startswith('_'):
                     values[key[1:].replace("_", " ")] = fields[key]
             try:
                 table = Table(api_key, app_id, table_name)
-                table.create(values, typecast=False)
+                result = table.create(values, typecast=False)
+                print('-----------------', result)
             except:
                 fields = 'Error'
             run_action_response = {
