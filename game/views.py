@@ -15,7 +15,6 @@ class TriggerTableView(GenericAPIView):
     serializer_class = ConnectorSerializer
 
     def post(self, request):
-        print('---------------1----------------')
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -26,7 +25,6 @@ class TriggerTableView(GenericAPIView):
         app_id = ''
         table_name = ''
 
-        print('---------------2----------------')
         key = params['key']
         if 'api_key' in params['fieldData']:
             api_key = params['fieldData']['api_key']
@@ -35,15 +33,18 @@ class TriggerTableView(GenericAPIView):
         if 'table_name' in params['fieldData']:
             table_name = params['fieldData']['table_name']
 
-        print('---------------3----------------')
         if api_key != '' and app_id != '' and table_name != '':
-            print('---------------4----------------', request.data)
             try:
                 table = Table(api_key, app_id, table_name)
                 sample_array = {}
                 out_put_fields = []
                 for key in table.first()['fields']:
                     sample_array[key.lower().replace(" ", "_")] = table.first()['fields'][key]
+                    out_put_fields.append({
+                        "key": table.first()['fields'][key].replace(" ", "_"),
+                        "label": table.first()['fields'][key],
+                        "type": "string"
+                    })
                 return Response(
                     {
                         "jsonrpc": "2.0",
@@ -111,7 +112,7 @@ class FirstRowView(GenericAPIView):
             try:
                 table = Table(api_key, app_id, table_name)
                 first_row = []
-                if table.first()['fields'] != {}:
+                if table.first():
                     for key in table.first()['fields']:
                         first_row.append({
                             "key": "_" + key.replace(" ", "_"),
