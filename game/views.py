@@ -75,7 +75,7 @@ class TriggerTableView(GenericAPIView):
                         'code': 1,
                         'message': 'fetching table is failed'
                     },
-                    'id': id
+                    'id': request_id
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -162,7 +162,7 @@ class FirstRowView(GenericAPIView):
                                 'code': 1,
                                 'message': 'Please add a sample record to get field list from your table'
                             },
-                            'id': id
+                            'id': request_id
                         },
                         status=status.HTTP_201_CREATED
                     )
@@ -174,7 +174,7 @@ class FirstRowView(GenericAPIView):
                             'code': 1,
                             'message': 'Getting Table is failed'
                         },
-                        'id': id
+                        'id': request_id
                     },
                     status=status.HTTP_201_CREATED
                 )
@@ -186,7 +186,7 @@ class FirstRowView(GenericAPIView):
                         'code': 1,
                         'message': 'fetching table is failed'
                     },
-                    'id': id
+                    'id': request_id
                 },
                 status=status.HTTP_201_CREATED
             )
