@@ -37,6 +37,7 @@ class TriggerTableView(GenericAPIView):
 
         print('---------------3----------------')
         if api_key != '' and app_id != '' and table_name != '':
+            print('---------------4----------------', request.data)
             try:
                 table = Table(api_key, app_id, table_name)
                 sample_array = {}
@@ -66,6 +67,7 @@ class TriggerTableView(GenericAPIView):
                     status=status.HTTP_201_CREATED
                 )
         else:
+            print('---------------5----------------')
             return Response(
                 {
                     'jsonrpc': '2.0',
