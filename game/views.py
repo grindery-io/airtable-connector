@@ -50,7 +50,8 @@ class TriggerTableView(GenericAPIView):
                         "jsonrpc": "2.0",
                         "id": request_id,
                         "result": {
-                            "sample": sample_array
+                            "sample": sample_array,
+                            "outputFields": out_put_fields
                         }
                     },
                     status=status.HTTP_201_CREATED
@@ -68,7 +69,6 @@ class TriggerTableView(GenericAPIView):
                     status=status.HTTP_201_CREATED
                 )
         else:
-            print('---------------5----------------')
             return Response(
                 {
                     'jsonrpc': '2.0',
@@ -158,12 +158,19 @@ class FirstRowView(GenericAPIView):
                 else:
                     return Response(
                         {
-                            'jsonrpc': '2.0',
-                            'error': {
-                                'code': 1,
-                                'message': 'Please add a sample record to get field list from your table'
-                            },
-                            'id': request_id
+                            "jsonrpc": "2.0",
+                            "id": request_id,
+                            "result": {
+                                "inputFields": [{
+                                    "key": "error_response",
+                                    "label": "",
+                                    "type": "string",
+                                    "default": "Please add a sample record to get full field list from your table",
+                                    "readonly": True,
+                                    "helpText": "You need to full fill to all field with sample data in a record",
+                                    "required": True
+                                }],
+                            }
                         },
                         status=status.HTTP_201_CREATED
                     )
