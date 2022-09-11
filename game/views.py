@@ -1,3 +1,4 @@
+import json
 from pyairtable import Table
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -17,7 +18,6 @@ class TriggerTableView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        print('-------------------------------', request.data)
         params = serializer.data.get('params')
         request_id = serializer.data.get('id')
 
@@ -44,7 +44,6 @@ class TriggerTableView(GenericAPIView):
                         "jsonrpc": "2.0",
                         "id": request_id,
                         "result": {
-                            "inputFields": [],
                             "sample": sample_array
                         }
                     },
@@ -62,7 +61,18 @@ class TriggerTableView(GenericAPIView):
                     },
                     status=status.HTTP_201_CREATED
                 )
-
+        else:
+            return Response(
+                {
+                    'jsonrpc': '2.0',
+                    'error': {
+                        'code': 1,
+                        'message': 'fetching table is failed'
+                    },
+                    'id': id
+                },
+                status=status.HTTP_201_CREATED
+            )
 
 class FirstRowView(GenericAPIView):
     def __init__(self, *args, **kwargs):
