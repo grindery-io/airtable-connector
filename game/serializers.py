@@ -14,27 +14,12 @@ class FieldDataSerializer(serializers.Serializer):
         return attrs
 
 
-class CredentialsSerializer(serializers.Serializer):
-    access_token = serializers.CharField(required=False, allow_blank=True)
-    token_type = serializers.CharField(required=False, allow_blank=True)
-    expires_in = serializers.CharField(required=False, allow_blank=True)
-    refresh_token = serializers.CharField(required=False, allow_blank=True)
-    scope = serializers.CharField(required=False, allow_blank=True)
-
-    class Meta:
-        fields = ("access_token", "token_type", "expires_in", "refresh_token", "scope")
-
-    def validate(self, attrs):
-        return attrs
-
-
 class ParamSerializer(serializers.Serializer):
     key = serializers.CharField(required=False)
     fieldData = FieldDataSerializer()
-    credentials = CredentialsSerializer()
 
     class Meta:
-        fields = ("key", "credentials")
+        fields = ("key",)
 
     def validate(self, attrs):
         return attrs
