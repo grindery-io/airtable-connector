@@ -8,7 +8,7 @@ class FieldDataSerializer(serializers.Serializer):
     table_name = serializers.CharField(required=False)
 
     class Meta:
-        fields = ("guild", "channel")
+        fields = ("api_key", "app_id", "table_name")
 
     def validate(self, attrs):
         return attrs
