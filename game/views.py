@@ -37,8 +37,14 @@ class TriggerTableView(GenericAPIView):
             try:
                 table = Table(api_key, app_id, table_name)
                 sample_array = {}
+                out_put_fields = []
                 for key in table.first()['fields']:
                     sample_array[key.lower().replace(" ", "_")] = table.first()['fields'][key]
+                    out_put_fields.append({
+                        "key": data.replace(" ", "_"),
+                        "label": data,
+                        "type": "string"
+                    })
                 return Response(
                     {
                         "jsonrpc": "2.0",
@@ -105,48 +111,61 @@ class FirstRowView(GenericAPIView):
             try:
                 table = Table(api_key, app_id, table_name)
                 first_row = []
-                for key in table.first()['fields']:
-                    first_row.append({
-                        "key": "_" + key.replace(" ", "_"),
-                        "label": key,
-                        "type": "string"
-                    })
+                if table.first()['fields'] != {}:
+                    for key in table.first()['fields']:
+                        first_row.append({
+                            "key": "_" + key.replace(" ", "_"),
+                            "label": key,
+                            "type": "string"
+                        })
 
-                return Response(
-                    {
-                        "jsonrpc": "2.0",
-                        "id": request_id,
-                        "result": {
-                            "inputFields": [
-                                {
-                                    "key": "api_key",
-                                    "label": "API key",
-                                    "type": "string",
-                                    "placeholder": "To generate or manage your API key, visit your account page. https://airtable.com/account",
-                                    "list": False,
-                                    "required": True
-                                },
-                                {
-                                    "key": "app_id",
-                                    "label": "Base Id",
-                                    "type": "string",
-                                    "placeholder": "To get base id, API documentation of Base",
-                                    "list": False,
-                                    "required": True
-                                },
-                                {
-                                    "key": "table_name",
-                                    "label": "Table Name",
-                                    "type": "string",
-                                    "placeholder": "Enter table name in Airtable",
-                                    "list": False,
-                                    "required": True
-                                },
-                            ] + first_row
-                        }
-                    },
-                    status=status.HTTP_201_CREATED
-                )
+                    return Response(
+                        {
+                            "jsonrpc": "2.0",
+                            "id": request_id,
+                            "result": {
+                                "inputFields": [
+                                    {
+                                        "key": "api_key",
+                                        "label": "API key",
+                                        "type": "string",
+                                        "placeholder": "To generate or manage your API key, visit your account page. https://airtable.com/account",
+                                        "list": False,
+                                        "required": True
+                                    },
+                                    {
+                                        "key": "app_id",
+                                        "label": "Base Id",
+                                        "type": "string",
+                                        "placeholder": "To get base id, API documentation of Base",
+                                        "list": False,
+                                        "required": True
+                                    },
+                                    {
+                                        "key": "table_name",
+                                        "label": "Table Name",
+                                        "type": "string",
+                                        "placeholder": "Enter table name in Airtable",
+                                        "list": False,
+                                        "required": True
+                                    },
+                                ] + first_row
+                            }
+                        },
+                        status=status.HTTP_201_CREATED
+                    )
+                else:
+                    return Response(
+                        {
+                            'jsonrpc': '2.0',
+                            'error': {
+                                'code': 1,
+                                'message': 'Please add a sample record to get field list from your table'
+                            },
+                            'id': id
+                        },
+                        status=status.HTTP_201_CREATED
+                    )
             except:
                 return Response(
                     {
