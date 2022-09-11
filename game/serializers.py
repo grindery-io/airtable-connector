@@ -3,9 +3,9 @@ from rest_framework import serializers
 
 
 class FieldDataSerializer(serializers.Serializer):
-    api_key = serializers.CharField(required=False)
-    app_id = serializers.CharField(required=False)
-    table_name = serializers.CharField(required=False)
+    api_key = serializers.CharField(required=False, allow_blank=True)
+    app_id = serializers.CharField(required=False, allow_blank=True)
+    table_name = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         fields = ("api_key", "app_id", "table_name")
