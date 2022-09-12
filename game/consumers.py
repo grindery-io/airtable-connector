@@ -42,6 +42,7 @@ class newAirtableRowTrigger:
                 print('--------New-row-added----------api_key', api_key, '-----app_id----', app_id,
                       '------table_name------', table_name, '-------added-------', check_number_of_row - number_of_rows)
                 response = get_new_rows(api_key, app_id, table_name, check_number_of_row - number_of_rows)
+                print('----------------response---------------', response)
                 number_of_rows = check_number_of_row
                 for row in response:
                     print('--------added record----------', row)
