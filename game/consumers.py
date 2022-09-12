@@ -107,11 +107,11 @@ class SocketAdapter(AsyncJsonWebsocketConsumer):
             await self.send_json(response)
 
         if method == 'runAction':
-            print('---------method--------')
             values = {}
             for key in fields:
                 if key.startswith('_'):
                     values[key[1:].replace("_", " ")] = fields[key]
+            print('---------values--------',values)
             try:
                 table = Table(api_key, app_id, table_name)
                 result = table.create(values, typecast=False)
