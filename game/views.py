@@ -42,7 +42,7 @@ class TriggerTableView(GenericAPIView):
                     sample_array[key.lower().replace(" ", "_")] = table.first()['fields'][key]
                     out_put_fields.append({
                         "key": key.lower().replace(" ", "_"),
-                        "label": table.first()['fields'][key],
+                        "label": key,
                         "type": "string"
                     })
                 return Response(
