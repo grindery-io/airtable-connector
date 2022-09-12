@@ -108,10 +108,10 @@ class SocketAdapter(AsyncJsonWebsocketConsumer):
 
         if method == 'runAction':
             values = {}
+            print('---------values--------', fields)
             for key in fields:
                 if key.startswith('_'):
                     values[key[1:].replace("_", " ")] = fields[key]
-            print('---------values--------',values)
             try:
                 table = Table(api_key, app_id, table_name)
                 result = table.create(values, typecast=False)
