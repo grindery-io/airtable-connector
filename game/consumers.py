@@ -44,6 +44,7 @@ class newAirtableRowTrigger:
                 response = get_new_rows(api_key, app_id, table_name, check_number_of_row - number_of_rows)
                 number_of_rows = check_number_of_row
                 for row in response:
+                    print('--------added record----------', row)
                     await self.socket.send_json({
                         'jsonrpc': '2.0',
                         'method': 'notifySignal',
