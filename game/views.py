@@ -217,7 +217,7 @@ def get_new_rows(api_key, app_id, table_name, number_of_added_rows):
     rows_objects = []
     for row in rows[len(rows) - number_of_added_rows: len(rows)]:
         row_object = {}
-        for first_row, any_row in zip(rows[0], row):
-            row_object[first_row.replace(" ", "_")] = any_row
+        for key in row:
+            row_object[key.replace(" ", "_")] = row[key]
         rows_objects.append(row_object)
     return rows_objects
