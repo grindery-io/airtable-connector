@@ -2,7 +2,8 @@ import json
 from pyairtable import Table
 import asyncio
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from .views import get_number_of_rows, get_new_rows
+from .views import get_id_list, get_new_rows
+import numpy as np
 
 
 class newAirtableRowTrigger:
@@ -30,20 +31,19 @@ class newAirtableRowTrigger:
             if 'table_name' in fields:
                 table_name = fields['table_name']
 
-        number_of_rows = get_number_of_rows(api_key, app_id, table_name)
+        id_list = get_id_list(api_key, app_id, table_name)
 
         while self.socket.connected:
             print('--------Triggering--Airtable-------api_key---', api_key, '--------app_id-------', app_id,
                   '------table_name-------', table_name)
-            check_number_of_row = get_number_of_rows(api_key, app_id, table_name)
-            if check_number_of_row < number_of_rows:
-                number_of_rows = check_number_of_row
-            if check_number_of_row > number_of_rows:
+            check_id_list = get_id_list(api_key, app_id, table_name)
+            if np.setdiff1d(check_id_list, id_list) != []:
                 print('--------New-row-added----------api_key', api_key, '-----app_id----', app_id,
-                      '------table_name------', table_name, '-------added-------', check_number_of_row - number_of_rows)
-                response = get_new_rows(api_key, app_id, table_name, check_number_of_row - number_of_rows)
+                      '------table_name------', table_name)
+                added_id_list = np.setdiff1d(check_id_list, id_list)
+                response = get_new_rows(api_key, app_id, table_name, added_id_list)
                 print('----------------response---------------', response)
-                number_of_rows = check_number_of_row
+                id_list = check_id_list
                 for row in response:
                     print('--------added record----------', row)
                     await self.socket.send_json({

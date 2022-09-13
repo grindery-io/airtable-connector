@@ -200,22 +200,26 @@ class FirstRowView(GenericAPIView):
             )
 
 
-def get_number_of_rows(api_key, app_id, table_name):
+def get_id_list(api_key, app_id, table_name):
     try:
-        return len(Table(api_key, app_id, table_name).all())
+        id_list = []
+        for record in Table(api_key, app_id, table_name).all():
+            id_list.append(record['id'])
+        return id_list
     except:
-        return 0
+        return []
 
 
-def get_new_rows(api_key, app_id, table_name, number_of_added_rows):
-    rows = []
+def get_new_rows(api_key, app_id, table_name, added_id_list):
+    added_records = []
     try:
         for item in Table(api_key, app_id, table_name).all():
-            rows.append(item['fields'])
+            if item['id'] in added_id_list:
+                added_records.append(item['fields'])
     except:
-        rows = []
+        added_records = []
     rows_objects = []
-    for row in rows[len(rows) - number_of_added_rows: len(rows)]:
+    for row in added_records:
         row_object = {}
         for key in row:
             row_object[key.replace(" ", "_")] = row[key]
