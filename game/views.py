@@ -162,8 +162,8 @@ class FirstRowView(GenericAPIView):
                             "id": request_id,
                             "result": {
                                 "inputFields": [{
-                                    "key": "error",
-                                    "label": "Error",
+                                    "key": "help",
+                                    "label": "Help",
                                     "type": "string",
                                     "default": "Please add a sample record to get full field list from your table",
                                     "readonly": True,
