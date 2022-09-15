@@ -196,8 +196,7 @@ class FirstRowView(GenericAPIView):
                                         "key": "warning",
                                         "label": "Warning",
                                         "type": "info",
-                                        "helpText": "Your table is empty, please add an example record.",
-                                        "required": True
+                                        "helpText": "Table must have at least one record with data. If your table is empty, please add an example record."
                                     }
                                 ],
                             }
