@@ -166,13 +166,6 @@ class FirstRowView(GenericAPIView):
                             "result": {
                                 "inputFields": [
                                     {
-                                        "key": "warning",
-                                        "label": "Warning",
-                                        "type": "info",
-                                        "helpText": "Your table is empty, please add an example record.",
-                                        "required": True
-                                    },
-                                    {
                                         "key": "api_key",
                                         "label": "API key",
                                         "type": "string",
@@ -199,6 +192,13 @@ class FirstRowView(GenericAPIView):
                                         "list": False,
                                         "required": True
                                     },
+                                    {
+                                        "key": "warning",
+                                        "label": "Warning",
+                                        "type": "info",
+                                        "helpText": "Your table is empty, please add an example record.",
+                                        "required": True
+                                    }
                                 ],
                             }
                         },
