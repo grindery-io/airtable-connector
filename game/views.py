@@ -169,9 +169,7 @@ class FirstRowView(GenericAPIView):
                                         "key": "warning",
                                         "label": "Warning",
                                         "type": "info",
-                                        "default": "",
-                                        "readonly": True,
-                                        "helpText": "You need to full fill to all field with sample data in a record",
+                                        "helpText": "Your table is empty, please add an example record.",
                                         "required": True
                                     },
                                     {
