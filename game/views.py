@@ -66,7 +66,7 @@ class TriggerTableView(GenericAPIView):
                         },
                         'id': id
                     },
-                    status=status.HTTP_201_CREATED
+                    status=status.HTTP_400_BAD_REQUEST
                 )
         else:
             return Response(
@@ -78,7 +78,7 @@ class TriggerTableView(GenericAPIView):
                     },
                     'id': request_id
                 },
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
@@ -130,7 +130,8 @@ class FirstRowView(GenericAPIView):
                                         "key": "api_key",
                                         "label": "API key",
                                         "type": "string",
-                                        "placeholder": "To generate or manage your API key, visit your account page. https://airtable.com/account",
+                                        "placeholder": "keyLOfGeYHXLqpeo0",
+                                        "helpText": "To get API key, visit your account page: https://airtable.com/account.",
                                         "list": False,
                                         "required": True
                                     },
@@ -138,7 +139,8 @@ class FirstRowView(GenericAPIView):
                                         "key": "app_id",
                                         "label": "Base Id",
                                         "type": "string",
-                                        "placeholder": "To get base id, API documentation of Base",
+                                        "placeholder": "appGgI109POdPOOKK",
+                                        "helpText": "You can get base ID from the base URL, or from API documentation at https://airtable.com/api.",
                                         "list": False,
                                         "required": True
                                     },
@@ -146,7 +148,8 @@ class FirstRowView(GenericAPIView):
                                         "key": "table_name",
                                         "label": "Table Name",
                                         "type": "string",
-                                        "placeholder": "Enter table name in Airtable",
+                                        "placeholder": "Table Name",
+                                        "helpText": "Table must have at least one record with data. If your table is empty, please add an example record.",
                                         "list": False,
                                         "required": True
                                     },
@@ -161,18 +164,47 @@ class FirstRowView(GenericAPIView):
                             "jsonrpc": "2.0",
                             "id": request_id,
                             "result": {
-                                "inputFields": [{
-                                    "key": "help",
-                                    "label": "Help",
-                                    "type": "string",
-                                    "default": "Please add a sample record to get full field list from your table",
-                                    "readonly": True,
-                                    "helpText": "You need to full fill to all field with sample data in a record",
-                                    "required": True
-                                }],
+                                "inputFields": [
+                                    {
+                                        "key": "warning",
+                                        "label": "Warning",
+                                        "type": "info",
+                                        "default": "",
+                                        "readonly": True,
+                                        "helpText": "You need to full fill to all field with sample data in a record",
+                                        "required": True
+                                    },
+                                    {
+                                        "key": "api_key",
+                                        "label": "API key",
+                                        "type": "string",
+                                        "placeholder": "keyLOfGeYHXLqpeo0",
+                                        "helpText": "To get API key, visit your account page: https://airtable.com/account.",
+                                        "list": False,
+                                        "required": True
+                                    },
+                                    {
+                                        "key": "app_id",
+                                        "label": "Base Id",
+                                        "type": "string",
+                                        "placeholder": "appGgI109POdPOOKK",
+                                        "helpText": "You can get base ID from the base URL, or from API documentation at https://airtable.com/api.",
+                                        "list": False,
+                                        "required": True
+                                    },
+                                    {
+                                        "key": "table_name",
+                                        "label": "Table Name",
+                                        "type": "string",
+                                        "placeholder": "Table Name",
+                                        "helpText": "Table must have at least one record with data. If your table is empty, please add an example record.",
+                                        "list": False,
+                                        "required": True
+                                    },
+                                ],
                             }
                         },
-                        status=status.HTTP_201_CREATED
+                        status=status.HTTP_400_BAD_REQUEST
                     )
             except:
                 return Response(
@@ -184,7 +216,7 @@ class FirstRowView(GenericAPIView):
                         },
                         'id': request_id
                     },
-                    status=status.HTTP_201_CREATED
+                    status=status.HTTP_400_BAD_REQUEST
                 )
         else:
             return Response(
@@ -196,7 +228,7 @@ class FirstRowView(GenericAPIView):
                     },
                     'id': request_id
                 },
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
