@@ -1,10 +1,12 @@
 import json
+import requests
 from pyairtable import Table
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import ConnectorSerializer
+from common.serializers import serialize_base
 
 
 class TriggerTableView(GenericAPIView):
@@ -21,21 +23,93 @@ class TriggerTableView(GenericAPIView):
         params = serializer.data.get('params')
         request_id = serializer.data.get('id')
 
-        api_key = ''
+        personal_access_token = ''
         app_id = ''
         table_name = ''
 
         key = params['key']
-        if 'api_key' in params['fieldData']:
-            api_key = params['fieldData']['api_key']
+        if 'personal_access_token' in params['fieldData']:
+            personal_access_token = params['fieldData']['personal_access_token']
         if 'app_id' in params['fieldData']:
             app_id = params['fieldData']['app_id']
         if 'table_name' in params['fieldData']:
             table_name = params['fieldData']['table_name']
 
-        if api_key != '' and app_id != '' and table_name != '':
+        if personal_access_token != '' and app_id == '' and table_name == '':
+            header_my = {
+                'Authorization': 'Bearer ' + personal_access_token,
+                'Content-Type': 'application/json'
+            }
+            url = "https://api.airtable.com/v0/meta/bases"
+            res_app_list = requests.get(headers=header_my, url=url)
+            app_list = []
+
+            if res_app_list.status_code == 200:
+                for an_app in json.loads(res_app_list.content)['bases']:
+                    app_list.append({
+                        **serialize_base(an_app)
+                    })
+
+            return Response(
+                {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": {
+                        "inputFields": [
+                            {
+                                "key": "app_id",
+                                "label": "Base",
+                                "helpText": "",
+                                "type": "string",
+                                "required": True,
+                                "placeholder": "Choose...",
+                                "choices": app_list
+                            }
+                        ]
+                    }
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        elif personal_access_token != '' and app_id != '' and table_name == '':
+            header = {
+                'Authorization': 'Bearer ' + personal_access_token,
+                'Content-Type': 'application/json'
+            }
+            url = "https://api.airtable.com/v0/meta/bases/" + app_id + "/tables"
+            res_table_list = requests.get(headers=header, url=url)
+            table_list = []
+
+            if res_table_list.status_code == 200:
+                for a_table in json.loads(res_table_list.content)['tables']:
+                    table_list.append({
+                        **serialize_base(a_table)
+                    })
+
+            return Response(
+                {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": {
+                        "inputFields": [
+                            {
+                                "key": "table_name",
+                                "label": "Table Name",
+                                "helpText": "Table must have at least one record with data. If your table is empty, please add an example record.",
+                                "type": "string",
+                                "required": True,
+                                "placeholder": "Choose...",
+                                "choices": table_list
+                            }
+                        ]
+                    }
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        elif personal_access_token != '' and app_id != '' and table_name != '':
             try:
-                table = Table(api_key, app_id, table_name)
+                table = Table(personal_access_token, app_id, table_name)
                 sample_array = {}
                 out_put_fields = []
                 for key in table.first()['fields']:
