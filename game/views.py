@@ -29,6 +29,7 @@ class TriggerTableView(GenericAPIView):
 
         key = params['key']
         print('--------fieldData--------', params['fieldData'])
+
         if 'personal_access_token' in params['fieldData']:
             personal_access_token = params['fieldData']['personal_access_token']
         if 'app_id' in params['fieldData']:
