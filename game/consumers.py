@@ -18,30 +18,28 @@ class newAirtableRowTrigger:
         request = json.loads(self.request)
         params = request.get("params", None)
         session_id = params['sessionId']
-        api_key = ''
+        personal_access_token = ''
         app_id = ''
         table_name = ''
 
         if 'fields' in params:
             fields = params['fields']
-            if 'api_key' in fields:
-                api_key = fields['api_key']
+            if 'personal_access_token' in fields:
+                personal_access_token = fields['personal_access_token']
             if 'app_id' in fields:
                 app_id = fields['app_id']
             if 'table_name' in fields:
                 table_name = fields['table_name']
 
-        id_list = get_id_list(api_key, app_id, table_name)
+        id_list = get_id_list(personal_access_token, app_id, table_name)
 
         while self.socket.connected:
-            print('--------Triggering--Airtable-------api_key---', api_key, '--------app_id-------', app_id,
-                  '------table_name-------', table_name)
-            check_id_list = get_id_list(api_key, app_id, table_name)
+            print('--------Triggering--Airtable-------app_id-------', app_id, '------table_name-------', table_name)
+            check_id_list = get_id_list(personal_access_token, app_id, table_name)
             if np.setdiff1d(check_id_list, id_list) != []:
-                print('--------New-row-added----------api_key', api_key, '-----app_id----', app_id,
-                      '------table_name------', table_name)
+                print('--------New-row-added-----------app_id----', app_id, '------table_name------', table_name)
                 added_id_list = np.setdiff1d(check_id_list, id_list)
-                response = get_new_rows(api_key, app_id, table_name, added_id_list)
+                response = get_new_rows(personal_access_token, app_id, table_name, added_id_list)
                 print('----------------response---------------', response)
                 id_list = check_id_list
                 for row in response:
@@ -80,7 +78,7 @@ class SocketAdapter(AsyncJsonWebsocketConsumer):
         key = ''
         fields = ''
         session_id = ''
-        api_key = ''
+        personal_access_token = ''
         app_id = ''
         table_name = ''
 
@@ -91,8 +89,8 @@ class SocketAdapter(AsyncJsonWebsocketConsumer):
                 session_id = params['sessionId']
             if 'fields' in params:
                 fields = params['fields']
-                if 'api_key' in fields:
-                    api_key = fields['api_key']
+                if 'personal_access_token' in fields:
+                    personal_access_token = fields['personal_access_token']
                 if 'app_id' in fields:
                     app_id = fields['app_id']
                 if 'table_name' in fields:
@@ -113,7 +111,7 @@ class SocketAdapter(AsyncJsonWebsocketConsumer):
                 if key.startswith('_'):
                     values[key[1:].replace("_", " ")] = fields[key]
             try:
-                table = Table(api_key, app_id, table_name)
+                table = Table(personal_access_token, app_id, table_name)
                 result = table.create(values, typecast=False)
                 print('-----------------', result)
             except:
