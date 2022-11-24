@@ -35,6 +35,9 @@ class TriggerTableView(GenericAPIView):
         if 'table_name' in params['fieldData']:
             table_name = params['fieldData']['table_name']
 
+        print('--------personal_access_token--------', personal_access_token)
+        print('--------app_id--------', app_id)
+        print('--------table_name--------', table_name)
         if personal_access_token != '' and app_id == '' and table_name == '':
             header_my = {
                 'Authorization': 'Bearer ' + personal_access_token,
