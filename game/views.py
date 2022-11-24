@@ -64,6 +64,17 @@ class TriggerTableView(GenericAPIView):
                     "result": {
                         "inputFields": [
                             {
+                                "key": "personal_access_token",
+                                "label": "Airtable Personal access token",
+                                "type": "string",
+                                "placeholder": "patTPTGCSDECZm7i.3fa8581g1r52a52cb5a224sb8arccaf2ae82df346cd685ee766ff939dcb879be6",
+                                "helpText": "To get Personal access token, visit your account page: https://airtable.com/create/tokens.",
+                                "list": False,
+                                "required": True,
+                                "default": "",
+                                "computed": False
+                            },
+                            {
                                 "key": "app_id",
                                 "label": "Base",
                                 "helpText": "",
@@ -98,6 +109,17 @@ class TriggerTableView(GenericAPIView):
                     "id": request_id,
                     "result": {
                         "inputFields": [
+                            {
+                                "key": "personal_access_token",
+                                "label": "Airtable Personal access token",
+                                "type": "string",
+                                "placeholder": "patTPTGCSDECZm7i.3fa8581g1r52a52cb5a224sb8arccaf2ae82df346cd685ee766ff939dcb879be6",
+                                "helpText": "To get Personal access token, visit your account page: https://airtable.com/create/tokens.",
+                                "list": False,
+                                "required": True,
+                                "default": "",
+                                "computed": False
+                            },
                             {
                                 "key": "app_id",
                                 "label": "Base",
