@@ -40,6 +40,9 @@ class TriggerTableView(GenericAPIView):
         print('--------personal_access_token--------', personal_access_token)
         print('--------app_id--------', app_id)
         print('--------table_name--------', table_name)
+
+        app_list = []
+        table_list = []
         if personal_access_token != '' and app_id == '' and table_name == '':
             header_my = {
                 'Authorization': 'Bearer ' + personal_access_token,
@@ -47,7 +50,6 @@ class TriggerTableView(GenericAPIView):
             }
             url = "https://api.airtable.com/v0/meta/bases"
             res_app_list = requests.get(headers=header_my, url=url)
-            app_list = []
 
             if res_app_list.status_code == 200:
                 for an_app in json.loads(res_app_list.content)['bases']:
@@ -83,7 +85,6 @@ class TriggerTableView(GenericAPIView):
             }
             url = "https://api.airtable.com/v0/meta/bases/" + app_id + "/tables"
             res_table_list = requests.get(headers=header, url=url)
-            table_list = []
 
             if res_table_list.status_code == 200:
                 for a_table in json.loads(res_table_list.content)['tables']:
@@ -98,8 +99,17 @@ class TriggerTableView(GenericAPIView):
                     "result": {
                         "inputFields": [
                             {
+                                "key": "app_id",
+                                "label": "Base",
+                                "helpText": "",
+                                "type": "string",
+                                "required": True,
+                                "placeholder": "Choose...",
+                                "choices": app_list
+                            },
+                            {
                                 "key": "table_name",
-                                "label": "Table Name",
+                                "label": "Table",
                                 "helpText": "Table must have at least one record with data. If your table is empty, please add an example record.",
                                 "type": "string",
                                 "required": True,
