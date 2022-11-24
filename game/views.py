@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import ConnectorSerializer
-from common.serializers import serialize_base
+from common.serializers import serialize_base, serialize_table
 
 
 class TriggerTableView(GenericAPIView):
@@ -113,7 +113,7 @@ class TriggerTableView(GenericAPIView):
             if res_table_list.status_code == 200:
                 for a_table in json.loads(res_table_list.content)['tables']:
                     table_list.append({
-                        **serialize_base(a_table)
+                        **serialize_table(a_table)
                     })
 
             return Response(

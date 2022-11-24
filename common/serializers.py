@@ -1,7 +1,15 @@
 
 def serialize_base(base):
     return {
-        "value": base['name'],
+        "value": base['id'],
         "label":  base['name'],
-        "sample":  base['id']
+        "sample":  base['name']
+    }
+
+
+def serialize_table(table):
+    return {
+        "value": table['name'],
+        "label":  table['name'],
+        "sample":  table['id']
     }
