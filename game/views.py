@@ -90,6 +90,19 @@ class TriggerTableView(GenericAPIView):
             )
 
         elif personal_access_token != '' and app_id != '' and table_name == '':
+            header_my = {
+                'Authorization': 'Bearer ' + personal_access_token,
+                'Content-Type': 'application/json'
+            }
+            url = "https://api.airtable.com/v0/meta/bases"
+            res_app_list = requests.get(headers=header_my, url=url)
+
+            if res_app_list.status_code == 200:
+                for an_app in json.loads(res_app_list.content)['bases']:
+                    app_list.append({
+                        **serialize_base(an_app)
+                    })
+
             header = {
                 'Authorization': 'Bearer ' + personal_access_token,
                 'Content-Type': 'application/json'
