@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 
 class FieldDataSerializer(serializers.Serializer):
-    api_key = serializers.CharField(required=False, allow_blank=True)
+    personal_access_token = serializers.CharField(required=False, allow_blank=True)
     app_id = serializers.CharField(required=False, allow_blank=True)
     table_name = serializers.CharField(required=False, allow_blank=True)
 
