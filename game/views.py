@@ -152,6 +152,31 @@ class TriggerTableView(GenericAPIView):
             )
 
         elif personal_access_token != '' and app_id != '' and table_name != '':
+            header_my = {
+                'Authorization': 'Bearer ' + personal_access_token,
+                'Content-Type': 'application/json'
+            }
+            url = "https://api.airtable.com/v0/meta/bases"
+            res_app_list = requests.get(headers=header_my, url=url)
+
+            if res_app_list.status_code == 200:
+                for an_app in json.loads(res_app_list.content)['bases']:
+                    app_list.append({
+                        **serialize_base(an_app)
+                    })
+
+            header = {
+                'Authorization': 'Bearer ' + personal_access_token,
+                'Content-Type': 'application/json'
+            }
+            url = "https://api.airtable.com/v0/meta/bases/" + app_id + "/tables"
+            res_table_list = requests.get(headers=header, url=url)
+
+            if res_table_list.status_code == 200:
+                for a_table in json.loads(res_table_list.content)['tables']:
+                    table_list.append({
+                        **serialize_table(a_table)
+                    })
             try:
                 table = Table(personal_access_token, app_id, table_name)
                 sample_array = {}
@@ -169,6 +194,37 @@ class TriggerTableView(GenericAPIView):
                         "id": request_id,
                         "result": {
                             "sample": sample_array,
+                            "inputFields": [
+                                {
+                                    "key": "personal_access_token",
+                                    "label": "Airtable Personal access token",
+                                    "type": "string",
+                                    "placeholder": "patTPTGCSDECZm7i.3fa8581g1r52a52cb5a224sb8arccaf2ae82df346cd685ee766ff939dcb879be6",
+                                    "helpText": "To get Personal access token, visit your account page: https://airtable.com/create/tokens.",
+                                    "list": False,
+                                    "required": True,
+                                    "default": "",
+                                    "computed": False
+                                },
+                                {
+                                    "key": "app_id",
+                                    "label": "Base",
+                                    "helpText": "",
+                                    "type": "string",
+                                    "required": True,
+                                    "placeholder": "Choose...",
+                                    "choices": app_list
+                                },
+                                {
+                                    "key": "table_name",
+                                    "label": "Table",
+                                    "helpText": "Table must have at least one record with data. If your table is empty, please add an example record.",
+                                    "type": "string",
+                                    "required": True,
+                                    "placeholder": "Choose...",
+                                    "choices": table_list
+                                }
+                            ],
                             "outputFields": out_put_fields
                         }
                     },
