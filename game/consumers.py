@@ -36,23 +36,24 @@ class newAirtableRowTrigger:
         while self.socket.connected:
             print('--------Triggering--Airtable-------app_id-------', app_id, '------table_name-------', table_name)
             check_id_list = get_id_list(personal_access_token, app_id, table_name)
-            if np.setdiff1d(check_id_list, id_list) != []:
+            if np.setdiff1d(check_id_list, id_list):
                 print('--------New-row-added-----------app_id----', app_id, '------table_name------', table_name)
                 added_id_list = np.setdiff1d(check_id_list, id_list)
                 response = get_new_rows(personal_access_token, app_id, table_name, added_id_list)
                 print('----------------response---------------', response)
-                id_list = check_id_list
-                for row in response:
-                    print('--------added record----------', row)
-                    await self.socket.send_json({
-                        'jsonrpc': '2.0',
-                        'method': 'notifySignal',
-                        'params': {
-                            'key': 'airtableNewRowTrigger',
-                            'sessionId': session_id,
-                            'payload': row
-                        }
-                    })
+                if response:
+                    id_list = check_id_list
+                    for row in response:
+                        print('--------added record----------', row)
+                        await self.socket.send_json({
+                            'jsonrpc': '2.0',
+                            'method': 'notifySignal',
+                            'params': {
+                                'key': 'airtableNewRowTrigger',
+                                'sessionId': session_id,
+                                'payload': row
+                            }
+                        })
             await asyncio.sleep(60)
 
 
